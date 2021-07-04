@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    private CharacterController controller;
+    private float speed = 5.0f;
     // Start is called before the first frame update
     //initialise player settings
     void Start()
     {
-        
+        controller = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -31,31 +34,36 @@ public class PlayerController : MonoBehaviour
     */
     void Update()
     {
-        
+        controller.Move((Vector3.forward * speed) * Time.deltaTime);
     }
 
     //move somthing
-    void movementOption(){
+    void movementOption()
+    {
 
     }
 
     //jump
-    void jump(){
+    void jump()
+    {
 
     }
 
     //score
-    void score(){
+    void score()
+    {
 
     }
 
     //hurt
-    void getHurt(){
+    void getHurt()
+    {
 
     }
-    
+
     //die
-    void die(){
+    void die()
+    {
 
     }
 }
