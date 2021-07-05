@@ -40,30 +40,31 @@ public class PlayerController : MonoBehaviour
     //move somthing
     void movementOption()
     {
-
+        //left right
     }
 
     //jump
     void jump()
     {
-
+        controller.Move(Vector3.up * Time.deltaTime);
     }
 
     //score
     void score()
     {
-
+        //if picks up coin add x score
+        //add score while runngin
     }
 
     //hurt
     void getHurt()
     {
-
+        //hit obstacle get hurt
     }
 
     //die
     void die()
     {
-
+        //3 hits, die
     }
 }
