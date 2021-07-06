@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController controller;
     private float speed = 5.0f;
+    private float playerScore = 0;
     // Start is called before the first frame update
     //initialise player settings
     void Start()
@@ -46,6 +47,7 @@ public class PlayerController : MonoBehaviour
     //jump
     void jump()
     {
+        //potentially want to manipulate gravity here
         controller.Move(Vector3.up * Time.deltaTime);
     }
 
@@ -54,6 +56,7 @@ public class PlayerController : MonoBehaviour
     {
         //if picks up coin add x score
         //add score while runngin
+        //time manipulation
     }
 
     //hurt
@@ -66,5 +69,10 @@ public class PlayerController : MonoBehaviour
     void die()
     {
         //3 hits, die
+    }
+
+    void powerup()
+    {
+        //handle powerups
     }
 }
