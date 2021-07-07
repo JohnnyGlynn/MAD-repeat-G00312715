@@ -6,7 +6,10 @@ public class PlayerController : MonoBehaviour
 {
 
     private CharacterController controller;
+    private Vector3 movement;
+    private float jumpVelocity = 0.0f;
     private float speed = 5.0f;
+    private float gravity = 10.0f;
     private float playerScore = 0;
     private string powerup = "";
     // Start is called before the first frame update
@@ -36,34 +39,54 @@ public class PlayerController : MonoBehaviour
     */
     void Update()
     {
-        controller.Move((Vector3.forward * speed) * Time.deltaTime);
-        score();
 
+        //score();
 
-        //check if grounded
-        //check that not clipping into wall
-        if (Input.GetButtonDown("Left"))
+        if (controller.isGrounded)
         {
-            Debug.Log("left");
-            //controller.SimpleMove(left * speed)?
-            //move until wall
-
+            jumpVelocity = -0.1f;
         }
-        else if (Input.GetButtonDown("Right"))
+        else
         {
-            Debug.Log("right");
-            //controller.SimpleMove(right * speed)?
-            //move until wall
+            jumpVelocity -= gravity * Time.deltaTime;
+        }
 
-        }
-        else if (Input.GetButtonDown("Jump"))
-        {
-            Debug.Log("jump");
-            //controller.SimpleMove(jump * speed)?
-            //jump to clear obstacles
-            //potential double jump scenario??
-            //jump();
-        }
+        movement = Vector3.zero;
+
+        //x
+        movement.x = Input.GetAxisRaw("Horizontal") * speed;
+        //y
+        movement.y = jumpVelocity;
+        //z
+        movement.z = speed;
+
+        controller.Move(movement * Time.deltaTime);
+
+
+        ////check if grounded
+        ////check that not clipping into wall
+        //if (Input.GetButtonDown("left"))
+        //{
+        //    Debug.Log("left");
+        //    //controller.SimpleMove(left * speed)?
+        //    //move until wall
+
+        //}
+        //else if (Input.GetButtonDown("right"))
+        //{
+        //    Debug.Log("right");
+        //    //controller.SimpleMove(right * speed)?
+        //    //move until wall
+
+        //}
+        //else if (Input.GetButtonDown("jump"))
+        //{
+        //    Debug.Log("jump");
+        //    //controller.SimpleMove(jump * speed)?
+        //    //jump to clear obstacles
+        //    //potential double jump scenario??
+        //    //jump();
+        //}
     }
 
     //move somthing
@@ -74,12 +97,12 @@ public class PlayerController : MonoBehaviour
     }
 
     //jump
-    void jump()
-    {
-        //potentially want to manipulate gravity here
-        controller.Move(Vector3.up * Time.deltaTime);
-        //potentially scrap
-    }
+    //void jump()
+    //{
+    //    //potentially want to manipulate gravity here
+    //    controller.Move(Vector3.up * Time.deltaTime);
+    //    //potentially scrap
+    //}
 
     //score
     void score()
