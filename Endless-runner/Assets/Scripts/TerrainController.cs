@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TerrainController : MonoBehaviour
 {
+
+    private MeshRenderer ground;
     // Start is called before the first frame update
     /*
     Generate inital platform and camera control
