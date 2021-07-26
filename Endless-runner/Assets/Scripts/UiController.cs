@@ -1,9 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class UiController : MonoBehaviour
 {
+
+    private float score = 0.0f;
+    private float health = 3.0f;
+    private int timer;
+
+    [SerializeField] private Button pause = null; 
+
     // Start is called before the first frame update
     /*
     Load main menu
@@ -16,7 +25,7 @@ public class UiController : MonoBehaviour
     */
     void Start()
     {
-        
+        pause.onClick.AddListener(() => { ingameUI(); });
     }
 
     // Update is called once per frame
@@ -44,6 +53,6 @@ public class UiController : MonoBehaviour
     */
     void ingameUI()
     {
-
+        Debug.Log("Hello " + gameObject.name);
     }
 }
