@@ -35,8 +35,10 @@ public class UiController : MonoBehaviour
     */
     void Start()
     {
+        //pause button
         Pause_bt.onClick.AddListener( () => { Pause(); } );
 
+        //pause menu buttons
         Resume_bt.onClick.AddListener(() => { Resume(); });
         Restart_bt.onClick.AddListener(() => { Restart(); });
         MainMenu_bt.onClick.AddListener(() => { MainMenu(); });
@@ -44,6 +46,7 @@ public class UiController : MonoBehaviour
 
         pauseMenu = GameObject.FindGameObjectsWithTag("PauseMenu");
         ui = GameObject.FindGameObjectsWithTag("UI");
+        //pauseBackground = GameObject.get
         ShowPauseMenu(false);
     }
 
