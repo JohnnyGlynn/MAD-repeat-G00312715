@@ -4,148 +4,119 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
+    //Characters controller
     private CharacterController controller;
-    private Vector3 movement;
-    private float jumpVelocity = 0.0f;
-    private float speed = 5.0f;
-    private float gravity = 10.0f;
-    private float playerScore = 0;
-    private string powerup = "";
-    // Start is called before the first frame update
-    //initialise player settings
+
+    //Ui functions
+    public UiController ui;
+
+    //zeroing
+    private Vector3 movement = Vector3.zero;
+
+    //physics attributes
+    private float jumpVelocity = 6.0f;
+    private float speed = 5f;
+    private float gravity = 7.0f;
+
+    //score
+    private float score = 0.0f;
+
+    //pickups
+    private int rod = 50;
+    private int core = 100;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
-    /*
-    Update player position
-    Update next tiles/potential next collisions
-    Update score
-    Check Collisions
-    --If obstacle collisions, hurt player, if health = 0/3 end game
-    --If coin collisions, award player, update score
-    --If powerup collisions, add effect player
-    While powerup do
-    --Ghost mode, no collions
-    --double points
-    --extra life
-    Check difficulty level and adjust accordingly, score deciding factor factors
-    adjust difficulty by
-    --spawing more obstacled terain/not spawning a block
-    --speed increase l1 100%, l2 150%, l3 250%
-    */
     void Update()
     {
-
-        //score();
-
-        if (controller.isGrounded)
-        {
-            jumpVelocity = -0.1f;
-        }
-        else
-        {
-            jumpVelocity -= gravity * Time.deltaTime;
-        }
-
-        movement = Vector3.zero;
-
         //x
         movement.x = Input.GetAxisRaw("Horizontal") * speed;
         //y
-        movement.y = jumpVelocity;
+        //http://docs.unity3d.com/Documentation/ScriptReference/CharacterController.Move.html
+        if (controller.isGrounded && Input.GetButton("Jump"))
+        {
+            movement.y = jumpVelocity;
+        }
+        movement.y -= gravity * Time.deltaTime;
         //z
-        movement.z = speed;
-
+        if(score < 750.0f)
+        {
+            movement.z = speed;
+        } else if (score > 1500.0f && score < 3000.0f)
+        {
+            movement.z = speed * 1.25f;
+        } else if (score > 3000.0f && score < 5000.0f)
+        {
+            movement.z = speed * 1.75f;
+        } else if (score > 5000.0f && score < 100000.0f)
+        {
+            movement.z = speed * 2.0f;
+        } else if (score > 10000.0f)
+        {
+            movement.z = speed * 3.0f;
+        }
+        
+        //assign movements to the controller
         controller.Move(movement * Time.deltaTime);
 
+        timeScore();
+        ui.keepScore(score);
 
-        ////check if grounded
-        ////check that not clipping into wall
-        //if (Input.GetButtonDown("left"))
-        //{
-        //    Debug.Log("left");
-        //    //controller.SimpleMove(left * speed)?
-        //    //move until wall
-
-        //}
-        //else if (Input.GetButtonDown("right"))
-        //{
-        //    Debug.Log("right");
-        //    //controller.SimpleMove(right * speed)?
-        //    //move until wall
-
-        //}
-        //else if (Input.GetButtonDown("jump"))
-        //{
-        //    Debug.Log("jump");
-        //    //controller.SimpleMove(jump * speed)?
-        //    //jump to clear obstacles
-        //    //potential double jump scenario??
-        //    //jump();
-        //}
     }
 
-    //move somthing
-    void movementOption()
+    //collision detection
+    private void OnTriggerEnter(Collider p)
     {
-        //left right
-        //scrap this function probably
+        //fell to death
+        if (p.transform.CompareTag("DeathPlane"))
+        {
+            //Debug.Log("You died");
+            die();
+        }
+
+        //hit by enemy
+        if (p.transform.CompareTag("Enemy"))
+        {
+            //Debug.Log("Bad Guy got ya");
+            die();
+        }
+
+        //collected plutonium rod
+        if (p.transform.CompareTag("Collectible"))
+        {
+            //Debug.Log("Collected plutonium rod");
+            addScore(rod);
+            Destroy(p.gameObject);
+        }
+
+        //collected plutonium core
+        if (p.transform.CompareTag("Collectible2"))
+        {
+            //Debug.Log("Collected plutonium core");
+            addScore(core);
+            Destroy(p.gameObject);
+        }
     }
 
-    //jump
-    //void jump()
-    //{
-    //    //potentially want to manipulate gravity here
-    //    controller.Move(Vector3.up * Time.deltaTime);
-    //    //potentially scrap
-    //}
-
-    //score
-    void score()
+    //"Still standing" timer score
+    public void timeScore()
     {
-        //if picks up coin add x score
-        //add score while runngin
-        //time manipulation
-        playerScore += Time.deltaTime;
+        score += Time.deltaTime;
     }
 
-    //hurt
-    void getHurt()
+    //award score
+    public void addScore(int s)
     {
-        //hit obstacle get hurt
+        score += s;
     }
 
     //die
     void die()
     {
-        //3 hits, die
-    }
-
-    void powerupStatus()
-    {
-        //handle powerups
-        if (powerup == "")
-        {
-            //do nothing
-        }
-        else if (powerup == "2x")
-        {
-            //double scoring for x time
-
-        }
-        else if (powerup == "gm")
-        {
-            //do nothing
-            //"god mode", no damage collisions off
-        }
-        else if (powerup == "xl")
-        {
-            //do nothing
-            //add an extra health, regnerate lost health
-        }
+        //Debug.Log("Dead");
+        ui.DeathScreen(score);
     }
 }

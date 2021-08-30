@@ -1,18 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class UiController : MonoBehaviour
 {
-
-    private float score = 0.0f;
-    private float health = 3.0f;
-    private int timer;
-
+    //game object collections for showing/hiding
     GameObject[] ui;
     GameObject[] pauseMenu;
+    GameObject[] endScreen;
+
+    //score
+    [SerializeField]public Text scoreUI;
+    [SerializeField] public Text finalScore;
 
     //pause button
     [SerializeField] private Button Pause_bt = null;
@@ -23,16 +22,10 @@ public class UiController : MonoBehaviour
     [SerializeField] private Button MainMenu_bt = null;
     [SerializeField] private Button Quit_bt = null;
 
-    // Start is called before the first frame update
-    /*
-    Load main menu
-        Options:
-        Load single-player game
-        Load multi-player game
-        Scoreboard
-        Options (Volume, Screen size?)
-        Exit
-    */
+    //endscreen
+    [SerializeField] private Button EndMainMenu_bt = null;
+    [SerializeField] private Button Retry_bt = null;
+
     void Start()
     {
         //pause button
@@ -44,27 +37,26 @@ public class UiController : MonoBehaviour
         MainMenu_bt.onClick.AddListener(() => { MainMenu(); });
         Quit_bt.onClick.AddListener(() => { Quit(); });
 
+        //endscreen
+        EndMainMenu_bt.onClick.AddListener(() => { MainMenu(); });
+        Retry_bt.onClick.AddListener(() => { Restart(); });
+
+        //objects by tag
         pauseMenu = GameObject.FindGameObjectsWithTag("PauseMenu");
+        endScreen = GameObject.FindGameObjectsWithTag("EndScreen");
         ui = GameObject.FindGameObjectsWithTag("UI");
-        //pauseBackground = GameObject.get
+
         ShowPauseMenu(false);
+        ShowEndScreen(false);
     }
 
-    // Update is called once per frame
-    //Probably not neccesary
-    void Update()
+    //award score
+    public void keepScore(float score)
     {
-        
+        scoreUI.text = "Score: "+((int)score).ToString();
     }
 
-    //void HidePauseMenu()
-    //{
-    //    foreach (GameObject go in pauseMenu)
-    //    {
-    //        go.SetActive(false);
-    //    }
-    //}
-
+    //show hide pause menu
     void ShowPauseMenu(bool i)
     {
         if (i == true)
@@ -98,43 +90,74 @@ public class UiController : MonoBehaviour
         }
     }
 
-    /*All relevant code for the in game UI, 
-        Score, 
-        Health, 
-        Poweup status,
-        Multiplayer:
-            Scores,
-            Health,
-            Powerup,
-            Scoreboard/Leader/Something to see whos winning????
-    */
+    //show/hide end screen
+    void ShowEndScreen(bool i)
+    {
+        if (i == true)
+        {
+            //Showing end screen
+            foreach (GameObject go in endScreen)
+            {
+                go.SetActive(true);
+            }
 
+            //Hiding UI
+            foreach (GameObject u in ui)
+            {
+                u.SetActive(false);
+            }
+
+        }
+        else if (i == false)
+        {
+            //Hiding endscreen
+            foreach (GameObject go in endScreen)
+            {
+                go.SetActive(false);
+            }
+        }
+    }
+
+    //take score, show end screen
+    public void DeathScreen(float score)
+    {
+        finalScore.text = "Your Score: " + ((int)score).ToString();
+        Time.timeScale = 0;
+        ShowEndScreen(true);
+    }
+
+    //pause
     void Pause()
     {
         ShowPauseMenu(true);
         Time.timeScale = 0;
     }
 
+    //resume
     void Resume()
     {
         ShowPauseMenu(false);
         Time.timeScale = 1;
     }
 
+    //restart
     void Restart()
     {
-        //Application.LoadLevel(Application.loadedLevel);
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    //back to main menu
     void MainMenu()
     {
+        Time.timeScale = 1;
         SceneManager.LoadScene("MainMenu");
     }
 
+    //terminate application
     void Quit()
     {
         Application.Quit();
+        Time.timeScale = 1;//probably not needed
     }
 }

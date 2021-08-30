@@ -8,72 +8,91 @@ public class MainMenuScript : MonoBehaviour
 {
     [SerializeField] private Button StartGame_bt = null;
     [SerializeField] private Button Multiplayer_bt = null;
-    [SerializeField] private Button Leaderboard_bt = null;
-    [SerializeField] private Button Settings_bt = null;
+    [SerializeField] private Button HowTo_bt = null;
     [SerializeField] private Button Quit_bt = null;
+    [SerializeField] private Button BackToMenu_bt = null;
 
-    GameObject[] mainMenu;
+
+    GameObject[] MainMenu;
     GameObject[] MultiplayerMenu;
-    GameObject[] Leaderboard;
+    GameObject[] HowTo;
     GameObject[] Settings;
 
-    // Start is called before the first frame update
     void Start()
     {
-        //PlayAnimationinTheBackgroundOrSomthing
-        StartGame_bt.onClick.AddListener(() => { StartGame(); });
-        Multiplayer_bt.onClick.AddListener(() => { StartMultiplayer(); });
-        Leaderboard_bt.onClick.AddListener(() => { Settings(); });
-        Settings_bt.onClick.AddListener(() => { Leaderboard(); });
-        Quit_bt.onClick.AddListener(() => { Quit(); });
+        StartGame_bt.onClick.AddListener(() => { StartGame(); });//start single player
+        Multiplayer_bt.onClick.AddListener(() => { StartMultiplayer(); });//start multi player
+        HowTo_bt.onClick.AddListener(() => { HowToPlay(); });//show how to play screen
+        Quit_bt.onClick.AddListener(() => { Quit(); });//quit application
 
+        BackToMenu_bt.onClick.AddListener(() => { BackToMenu(); });//back to main menu from how to play
+
+        MainMenu = GameObject.FindGameObjectsWithTag("UI");//get main menu items
+        HowTo = GameObject.FindGameObjectsWithTag("HowToPlay");//get how to play items
+
+        ShowHowToPlay(false);//hide how to play
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //start game
     void StartGame()
     {
-        //change main to game?
         SceneManager.LoadScene("Main");
     }
 
+    //start multiplayer
     void StartMultiplayer()
     {
-        //load multiplayer game
-        //SceneManager.LoadScene("MainMenu");
-        //load more ui components like pause
-        //HideMenu(true, <SETTINGS/LEADERBOARD/MAINMENU>)
+        SceneManager.LoadScene("Multiplayer");
     }
 
-    void Settings()
+    void HowToPlay()
     {
-        //open settings
-        //load more ui components like pause
+        ShowHowToPlay(true);
     }
 
-    void Leaderboard()
+    void BackToMenu()
     {
-        //leaderboard
-        //^^^^ maybe some aws?
-        //load more UI components like pause
+        ShowHowToPlay(false);
     }
 
+    //show/hide how to play
+    void ShowHowToPlay(bool tf)
+    {
+        if (tf == true)
+        {
+            //Showing howto
+            foreach (GameObject go in HowTo)
+            {
+                go.SetActive(true);
+            }
+
+            //Hiding main menu
+            foreach (GameObject u in MainMenu)
+            {
+                u.SetActive(false);
+            }
+
+        }
+        else if (tf == false)
+        {
+            //Hiding howto
+            foreach (GameObject go in HowTo)
+            {
+                go.SetActive(false);
+            }
+
+            //Showing main menu
+            foreach (GameObject u in MainMenu)
+            {
+                u.SetActive(true);
+            }
+        }
+    }
+
+    //terminate application
     void Quit()
     {
         Application.Quit();
-    }
-
-    void HideMenu(bool tf, string[] tag)
-    {
-        //check for tags, set the tags based on tf true/false value
-        for ()
-        {
-
-        }
     }
 
 }

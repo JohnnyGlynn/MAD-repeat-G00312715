@@ -6,6 +6,15 @@ TagManager:
   tags:
   - UI
   - PauseMenu
+  - DeathPlane
+  - Multiplayer
+  - Enemy
+  - Collectible
+  - Player1
+  - Player2
+  - EndScreen
+  - HowToPlay
+  - Collectible2
   layers:
   - Default
   - TransparentFX
